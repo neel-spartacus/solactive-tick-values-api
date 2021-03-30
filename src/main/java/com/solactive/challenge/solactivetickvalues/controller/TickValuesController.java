@@ -3,7 +3,6 @@ package com.solactive.challenge.solactivetickvalues.controller;
 
 import com.solactive.challenge.solactivetickvalues.model.TickValue;
 import com.solactive.challenge.solactivetickvalues.service.TickValueService;
-import com.solactive.challenge.solactivetickvalues.utils.ObjectToCsvConverterUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -16,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -41,9 +39,9 @@ public class TickValuesController {
     @PostMapping(value = "solActive/tickValues")
     @ApiOperation(value = "Insert/Update tick value for a ric")
     @ApiResponses(value = {
-            @ApiResponse(code=200,message = "Success"),
-            @ApiResponse(code=401,message = "Unauthorized"),
-            @ApiResponse(code=500,message = "Failed to insert/update tick value",response = ResponseEntity.class)
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 500, message = "Failed to insert/update tick value", response = ResponseEntity.class)
     })
     public ResponseEntity saveTickValues(@RequestBody(required = true) String tickValue) throws IOException {
 
@@ -61,20 +59,18 @@ public class TickValuesController {
                     .closePrice(valueMap.get("CLOSE_PRICE") != null && !valueMap.get("CLOSE_PRICE").isEmpty() ? Double.valueOf(valueMap.get("CLOSE_PRICE")) : null)
                     .currency(valueMap.get("CURRENCY")).ric(valueMap.get("RIC")).build();
 
-             tickValueService.saveTickValues(tickValueObj);
+            tickValueService.saveTickValues(tickValueObj);
 
-            if(valueMap.get("CLOSE_PRICE") != null && !valueMap.get("CLOSE_PRICE").isEmpty() ){
-               List<TickValue> tickValuesForRic=tickValueService.getTickValuesForRic(valueMap.get("RIC"));
-               String timestamp=convertEpochToDate(valueMap.get("TIMESTAMP")).toString();
-               String ric=valueMap.get("RIC");
-               tickValueService.exportTickValues(ric, timestamp, tickValuesForRic);
+            if (valueMap.get("CLOSE_PRICE") != null && !valueMap.get("CLOSE_PRICE").isEmpty()) {
+                List<TickValue> tickValuesForRic = tickValueService.getTickValuesForRic(valueMap.get("RIC"));
+                String timestamp = convertEpochToDate(valueMap.get("TIMESTAMP")).toString();
+                String ric = valueMap.get("RIC");
+                tickValueService.exportTickValues(ric, timestamp, tickValuesForRic);
 
 
             }
 
-            return new ResponseEntity(tickValueObj,HttpStatus.OK);
-
-
+            return new ResponseEntity(tickValueObj, HttpStatus.OK);
 
 
         }
@@ -84,24 +80,24 @@ public class TickValuesController {
     @GetMapping(value = "solActive/tickValues/{ric}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "To look up for tick values for a particular ric", response = TickValue.class)
     @ApiResponses(value = {
-            @ApiResponse(code=200,message = "Success"),
-            @ApiResponse(code=401,message = "Unauthorized"),
-            @ApiResponse(code=500,message = "Failed to retrieve tick values for a ric")
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 500, message = "Failed to retrieve tick values for a ric")
     })
     public ResponseEntity<List<TickValue>> getTickValuesForRic(@PathVariable(value = "ric") String ric) {
         List<TickValue> tickValues = tickValueService.getTickValuesForRic(ric);
-        return tickValues!=null && !tickValues.isEmpty()? new ResponseEntity(tickValueService.getTickValuesForRic(ric),HttpStatus.OK)
-                :new ResponseEntity("No Tick Values found for ric : " + ric,HttpStatus.NO_CONTENT);
+        return tickValues != null && !tickValues.isEmpty() ? new ResponseEntity(tickValueService.getTickValuesForRic(ric), HttpStatus.OK)
+                : new ResponseEntity("No Tick Values found for ric : " + ric, HttpStatus.NO_CONTENT);
 
     }
 
 
     @GetMapping(value = "solActive/tickValues/exportCsvFor/{ric}", produces = "text/csv")
     @ApiOperation(value = "Download tick values for a ric ")
-    @ApiResponses(value ={
-        @ApiResponse(code=200,message = "Success"),
-        @ApiResponse(code=401,message = "Unauthorized"),
-        @ApiResponse(code=500,message = "Failed to download the csv file",response = ResponseEntity.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 500, message = "Failed to download the csv file", response = ResponseEntity.class)
     })
     public ResponseEntity downloadExportedCsvForRic(@PathVariable(value = "ric") String ric) {
 
@@ -111,7 +107,7 @@ public class TickValuesController {
                 .header("Content-Disposition", "attachment; filename=" + file.getName())
                 .contentLength(file.length())
                 .contentType(MediaType.parseMediaType("text/csv"))
-                .body(new FileSystemResource(file)) : new ResponseEntity("No file with tick values for " + ric,HttpStatus.NO_CONTENT);
+                .body(new FileSystemResource(file)) : new ResponseEntity("No file with tick values for " + ric, HttpStatus.NO_CONTENT);
 
     }
 }
