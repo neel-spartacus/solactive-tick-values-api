@@ -3,6 +3,7 @@ package com.solactive.challenge.solactivetickvalues.integration;
 
 import com.solactive.challenge.solactivetickvalues.SolactiveTickValuesApplication;
 import com.solactive.challenge.solactivetickvalues.service.TickValueService;
+import org.assertj.core.util.Lists;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
@@ -53,7 +54,7 @@ public class TickValuesIntegrationTest {
 
         ResponseEntity<Object> exchange = this.testRestTemplate.exchange(
                 UriComponentsBuilder.fromUriString("/solActive/tickValues").buildAndExpand(new HashMap<>()).toUri(), HttpMethod.POST,
-                createRequest(tickValues[(int) (Math.random() * tickValues.length - 1)]
+                createRequest(tickValues[(int) (Math.random() * tickValues.length - 1)], null
                 ), Object.class);
 
         Matcher<HttpStatus> equalToOk = Matchers.equalTo(HttpStatus.OK);
@@ -67,7 +68,7 @@ public class TickValuesIntegrationTest {
         uriVariables.put("ric", "AAPL.OQ");
         ResponseEntity<Object[]> exchange = this.testRestTemplate.exchange(
                 UriComponentsBuilder.fromUriString("/solActive/tickValues/{ric}").buildAndExpand(uriVariables).toUri(), HttpMethod.GET,
-                createRequest(null
+                createRequest(null, null
                 ), Object[].class);
 
         Matcher<HttpStatus> equalToOk = Matchers.equalTo(HttpStatus.OK);
@@ -80,14 +81,14 @@ public class TickValuesIntegrationTest {
     public void shouldReturnTickValuesAfterPost() {
         this.testRestTemplate.exchange(
                 UriComponentsBuilder.fromUriString("/solActive/tickValues").buildAndExpand(new HashMap<>()).toUri(), HttpMethod.POST,
-                createRequest(tickValues[0]
+                createRequest(tickValues[0], null
                 ), Object.class);
 
         Map<String, String> uriVariables = new HashMap<>();
         uriVariables.put("ric", "AAPL.OQ");
         ResponseEntity<Object[]> exchange = this.testRestTemplate.exchange(
                 UriComponentsBuilder.fromUriString("/solActive/tickValues/{ric}").buildAndExpand(uriVariables).toUri(), HttpMethod.GET,
-                createRequest(null
+                createRequest(null, null
                 ), Object[].class);
 
         Matcher<HttpStatus> equalToOk = Matchers.equalTo(HttpStatus.OK);
@@ -101,17 +102,17 @@ public class TickValuesIntegrationTest {
         for (int i = 0; i < tickValues.length; i++) {
             this.testRestTemplate.exchange(
                     UriComponentsBuilder.fromUriString("/solActive/tickValues").buildAndExpand(new HashMap<>()).toUri(), HttpMethod.POST,
-                    createRequest(tickValues[i]
+                    createRequest(tickValues[i], null
                     ), Object.class);
         }
 
 
         Map<String, String> uriVariables = new HashMap<>();
         uriVariables.put("ric", "AAPL.OQ");
-        ResponseEntity<Object> exchange = this.testRestTemplate.exchange(
+        ResponseEntity exchange = this.testRestTemplate.exchange(
                 UriComponentsBuilder.fromUriString("/solActive/tickValues/exportCsvFor/{ric}").buildAndExpand(uriVariables).toUri(), HttpMethod.GET,
-                createRequest(null
-                ), Object.class);
+                createRequest(null, "csv"
+                ), ResponseEntity.class);
 
         Matcher<HttpStatus> equalToOk = Matchers.equalTo(HttpStatus.OK);
 
@@ -119,9 +120,13 @@ public class TickValuesIntegrationTest {
     }
 
 
-    public static <T> HttpEntity<T> createRequest(T requestObject) {
+    public static <T> HttpEntity<T> createRequest(T requestObject, String csv) {
         HttpHeaders headers = new HttpHeaders();
-        return requestObject != null ? new HttpEntity<>(requestObject, headers) : new HttpEntity<>(headers);
 
+        if (csv != null && csv.equalsIgnoreCase("csv")) {
+            headers.setAccept(Lists.newArrayList(MediaType.valueOf("text/csv"), MediaType.APPLICATION_JSON));
+            headers.setContentDisposition(ContentDisposition.attachment().filename("Test.csv").build());
+        }
+        return requestObject != null ? new HttpEntity<>(requestObject, headers) : new HttpEntity<>(headers);
     }
 }

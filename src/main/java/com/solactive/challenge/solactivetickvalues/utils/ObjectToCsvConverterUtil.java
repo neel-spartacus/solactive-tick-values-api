@@ -19,10 +19,18 @@ import java.util.List;
 public class ObjectToCsvConverterUtil {
 
 
-    public static final String DELIMITER_UNDERSCORE="-";
-    public static File objectToCsvConverter(String ric,String timestamp,List<TickValue> tickValues) {
+    public static final String DELIMITER_UNDERSCORE = "-";
 
-        String file_location = "TickValues" + DELIMITER_UNDERSCORE + ric + DELIMITER_UNDERSCORE + timestamp.replace(":", "-")+".csv";
+    /**
+     * A utility method to convert java bean objects into csv file
+     *
+     * @param ric        Ric value
+     * @param timestamp  Timestamp for the tick
+     * @param tickValues List of tick values
+     */
+    public static File objectToCsvConverter(String ric, String timestamp, List<TickValue> tickValues) {
+
+        String file_location = "TickValues" + DELIMITER_UNDERSCORE + ric + DELIMITER_UNDERSCORE + timestamp.replace(":", "-") + ".csv";
         File file = null;
         try {
 
@@ -51,11 +59,10 @@ public class ObjectToCsvConverterUtil {
             file = new File(file_location);
 
 
-        }  catch (IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
+        } catch (IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Failed to export csv for " + ric, e);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Failed to export csv for " + ric, e);
         }
