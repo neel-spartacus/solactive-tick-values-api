@@ -103,7 +103,7 @@ public class TickValuesController {
         @ApiResponse(code=401,message = "Unauthorized"),
         @ApiResponse(code=500,message = "Failed to download the csv file",response = ResponseEntity.class)
     })
-    public ResponseEntity downloadTickValuesvCSForRic(@PathVariable(value = "ric") String ric) {
+    public ResponseEntity downloadExportedCsvForRic(@PathVariable(value = "ric") String ric) {
 
         File file = tickValueService.retrieveTickValueCsvForRic(ric);
 
