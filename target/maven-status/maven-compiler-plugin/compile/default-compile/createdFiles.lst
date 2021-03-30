@@ -1,0 +1,12 @@
+com\solactive\challenge\solactivetickvalues\service\TickValueService.class
+com\solactive\challenge\solactivetickvalues\utils\ObjectToCsvConverterUtil.class
+com\solactive\challenge\solactivetickvalues\SolactiveTickValuesApplication.class
+com\solactive\challenge\solactivetickvalues\config\BeanConfiguration.class
+com\solactive\challenge\solactivetickvalues\model\TickValue.class
+com\solactive\challenge\solactivetickvalues\controller\TickValuesController.class
+com\solactive\challenge\solactivetickvalues\exceptionhandler\ExceptionResponse.class
+com\solactive\challenge\solactivetickvalues\exceptionhandler\CustomExceptionHandler.class
+com\solactive\challenge\solactivetickvalues\utils\ColumnMappingStrategy.class
+com\solactive\challenge\solactivetickvalues\model\TickValue$TickValueBuilder.class
+com\solactive\challenge\solactivetickvalues\config\SwaggerConfiguration.class
+com\solactive\challenge\solactivetickvalues\utils\DateUtils.class
