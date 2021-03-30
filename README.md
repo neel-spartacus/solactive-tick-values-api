@@ -1,6 +1,6 @@
-Introduction:
+**Introduction**:
 
-System requirements:
+**System requirements:**
 
 1)OpenJDK for Java 1.8
 2)Git
@@ -12,18 +12,19 @@ System requirements:
 8)Project Lombok: https://projectlombok.org
 
 
-Building the project:
+**Building the project:**
 
 To build the JAR and run some tests:
-  mvn clean install
+ ** mvn clean install**
 
 To run the application:
-  java -jar target/solactive-tick-values-0.0.1-SNAPSHOT.jar
+  **java -jar target/solactive-tick-values-0.0.1-SNAPSHOT.jar**
 
 Swagger UI:
   http://localhost:8080/swagger-ui/
 
-Assumptions:
+**Assumptions:**
+
 1)Since an in memory solution had to be implemented,so used map to store the tick values and the the exported csv.
   Initially,thought of implementing an in memory database but since its mentioned no database,hence dropped it.
 
@@ -31,9 +32,9 @@ Assumptions:
 
 3)Added multithreading using executors for the post save call to process data asynchronously.
 
-Improvements:
+**Improvements:**
+
 1)Caching could be implemented.
 
 2)Since it seems to be a ready heavy service,NoSql databases/Amazon S3 can be used while scaling.
 
-3)
