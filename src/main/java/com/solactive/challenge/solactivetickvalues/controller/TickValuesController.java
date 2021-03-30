@@ -95,24 +95,6 @@ public class TickValuesController {
 
     }
 
-   /* @GetMapping(value = "solActive/tickValues/export/{ric}",produces = "text/csv")
-    @ApiOperation(value = "Download tick values for a ric ")
-    @ApiResponses(value = {
-            @ApiResponse(code=200,message = "Success"),
-            @ApiResponse(code=401,message = "Unauthorized"),
-            @ApiResponse(code=500,message = "Failed to download the csv file",response = ResponseEntity.class)
-    })
-    public ResponseEntity downloadTickValuesForRic(@PathVariable(value = "ric") String ric, HttpServletResponse response) {
-
-        File file = tickValueService.downloadTickValuesForRic(ric);
-
-        return file != null ? ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=" + file.getName())
-                .contentLength(file.length())
-                .contentType(MediaType.parseMediaType("text/csv"))
-                .body(new FileSystemResource(file)) : new ResponseEntity("No file with tick values for " + ric,HttpStatus.NO_CONTENT);
-
-    }*/
 
     @GetMapping(value = "solActive/tickValues/exportCsvFor/{ric}", produces = "text/csv")
     @ApiOperation(value = "Download tick values for a ric ")
