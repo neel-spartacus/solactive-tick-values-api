@@ -38,3 +38,15 @@ Swagger UI:
 
 2)Since it seems to be a ready heavy service,NoSql databases/Amazon S3 can be used while scaling.
 
+3)Designing the api's can be further improved and scaled based on various factors like the number of consumers of the api's,
+  how much data we are handling,the constraints we have,the amount of requests per second,the expected read/write ratio etc.
+
+4)Can transform it into microservices,each service can be worked on independently,scaled up/down and deployed.
+
+5)Identify and address bottlenecks, given the constraints. For example, do we need the following to address scalability issues?
+
+  Load balancer
+  Horizontal scaling
+  Caching
+  Database sharding
+
