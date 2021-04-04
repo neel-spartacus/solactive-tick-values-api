@@ -2,9 +2,11 @@ package com.solactive.challenge.solactivetickvalues.integration;
 
 
 import com.solactive.challenge.solactivetickvalues.SolactiveTickValuesApplication;
+import com.solactive.challenge.solactivetickvalues.config.AppConfig;
 import com.solactive.challenge.solactivetickvalues.service.TickValueService;
 import org.assertj.core.util.Lists;
 import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -15,9 +17,12 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.annotation.Resource;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -28,6 +33,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {SolactiveTickValuesApplication.class}, webEnvironment = WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = AppConfig.class)
 @ActiveProfiles(profiles = {"test"})
 public class TickValuesIntegrationTest {
 
@@ -74,7 +80,7 @@ public class TickValuesIntegrationTest {
         Matcher<HttpStatus> equalToOk = Matchers.equalTo(HttpStatus.OK);
         Matcher<HttpStatus> equalToNoContent = Matchers.equalTo(HttpStatus.NO_CONTENT);
 
-        assertThat("Success", exchange.getStatusCode(), Matchers.anyOf(equalToOk, equalToNoContent));
+        MatcherAssert.assertThat("Success", exchange.getStatusCode(), Matchers.anyOf(equalToOk, equalToNoContent));
     }
 
     @Test
@@ -93,7 +99,7 @@ public class TickValuesIntegrationTest {
 
         Matcher<HttpStatus> equalToOk = Matchers.equalTo(HttpStatus.OK);
 
-        assertThat("Success", exchange.getStatusCode(), Matchers.anyOf(equalToOk));
+        MatcherAssert.assertThat("Success", exchange.getStatusCode(), Matchers.anyOf(equalToOk));
     }
 
     @Test
@@ -112,11 +118,11 @@ public class TickValuesIntegrationTest {
         ResponseEntity exchange = this.testRestTemplate.exchange(
                 UriComponentsBuilder.fromUriString("/solActive/tickValues/exportCsvFor/{ric}").buildAndExpand(uriVariables).toUri(), HttpMethod.GET,
                 createRequest(null, "csv"
-                ), ResponseEntity.class);
+                ), File.class);
 
         Matcher<HttpStatus> equalToOk = Matchers.equalTo(HttpStatus.OK);
 
-        assertThat("Success", exchange.getStatusCode(), Matchers.anyOf(equalToOk));
+        MatcherAssert.assertThat("Success", exchange.getStatusCode(), Matchers.anyOf(equalToOk));
     }
 
 
