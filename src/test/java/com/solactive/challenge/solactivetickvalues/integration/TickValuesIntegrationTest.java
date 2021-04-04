@@ -65,7 +65,7 @@ public class TickValuesIntegrationTest {
 
         Matcher<HttpStatus> equalToOk = Matchers.equalTo(HttpStatus.OK);
 
-        assertThat("Success", exchange.getStatusCode(), Matchers.anyOf(equalToOk));
+        MatcherAssert.assertThat("Success", exchange.getStatusCode(), Matchers.anyOf(equalToOk));
     }
 
     @Test
